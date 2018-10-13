@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "linkedlist.h"
 
 int main(){
@@ -17,6 +18,8 @@ int main(){
     first=ordered_insert(first,n3,a3);
     first=ordered_insert(first,n2,a);
     first=ordered_insert(first,n4,a);
+    printf("%s\n",random_song(first)->name);
+    remove_song(first,n,a);
     print_list(first);
     printf("%s\n",search_artist(first,a)->name);
     first=free_list(first);

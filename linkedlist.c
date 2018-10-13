@@ -5,17 +5,17 @@
 #include "linkedlist.h"
 
 void print_list(struct song_node *ll){
-    printf("{");
+    printf("[");
     while (ll){
         if(!ll->next){
-            printf("[%s,%s]",ll->name,ll->artist);
+            printf("%s:%s",ll->name,ll->artist);
         }
         else{
-            printf("[%s,%s],",ll->name,ll->artist);
+            printf("%s:%s|",ll->name,ll->artist);
         }
         ll=ll->next;
     }
-    printf("}\n");
+    printf("]\n");
 }
 struct song_node * insert_front(struct song_node * front, char n[100], char a[100]){
     struct song_node *new = malloc(sizeof(struct song_node));
@@ -96,9 +96,34 @@ struct song_node * search_artist(struct song_node * front, char a[100]){
 }
 struct song_node * random_song(struct song_node * front){
     srand( time(NULL) );
+    int i=rand()%list_len(front);
+    int count=0;
+    while(count!=i){
+        front=front->next;
+        count++;
+    }
     return front;
 }
-struct song_node * remove_song(struct song_node * front, char n[100], char a[100]){
-    
-    return front;
+int list_len(struct song_node * front){
+    int count = 0;
+    while(front){
+        front=front->next;
+        count++;
+    }
+    return count;
+}
+void remove_song(struct song_node * front, char n[100], char a[100]){
+    struct song_node * init=front;
+    struct song_node * prev=front;
+    while(front){
+        if(front==search_song(front,n,a)){
+            prev->next=front->next;
+            free(front);
+            return;
+        }
+        else{
+            prev=front;
+        }
+        front=front->next;
+    }
 }
