@@ -18,6 +18,7 @@ int main(){
     first=ordered_insert(first,n2,a);
     first=ordered_insert(first,n4,a);
     print_list(first);
+    printf("%s\n",search_artist(first,a)->name);
     first=free_list(first);
      printf("Linked list after freed:");
     print_list(first);
