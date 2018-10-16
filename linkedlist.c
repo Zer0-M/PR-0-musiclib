@@ -39,38 +39,36 @@ struct song_node * ordered_insert(struct song_node * front, char n[100], char a[
     struct song_node * init=front;
     struct song_node * prev=front;
     int added=0;
-    if(strcmp(front->artist,a)>0){
+    if(!front||strcmp(front->artist,a)>0){
         return insert_front(front,n,a);
+        added=1;
     }
     else{
+        struct song_node *new = malloc(sizeof(struct song_node));
+        strcpy(new->name,n);
+        strcpy(new->artist,a);
         while(front){
             if(strcmp(front->artist,a)>0){
-                struct song_node *new = malloc(sizeof(struct song_node));
-                strcpy(new->name,n);
-                strcpy(new->artist,a);
                 prev->next=new;
                 new->next=front;
-                added=1;
+                break;
             }
             if(strcmp(front->artist,a)==0){
                 if(strcmp(front->name,n)>0){
-                    struct song_node *new = malloc(sizeof(struct song_node));
-                    strcpy(new->name,n);
-                    strcpy(new->artist,a);
-                    prev->next=new;
                     new->next=front;
-                    added=1;
+                    if(prev!=front){
+                        prev->next=new;
+                    }
+                    if(init==front){
+                        return new;
+                    }
+                    break;
                 }
             }
             prev=front;
             front=front->next;
         }
-        if(!added){
-            struct song_node *new = malloc(sizeof(struct song_node));
-            strcpy(new->name,n);
-            strcpy(new->artist,a);
-            prev->next=new;
-        }
+        prev->next=new;
     }
     return init;
 }
@@ -86,11 +84,12 @@ struct song_node * search_song(struct song_node * front, char n[100], char a[100
     return NULL;
 }
 struct song_node * search_artist(struct song_node * front, char a[100]){
-    while(front){
-        if(strcmp(front->artist,a)==0){
-            return front;
+    struct song_node * searchfront=front;
+    while(searchfront){
+        if(!strcmp(searchfront->artist,a)){
+            return searchfront;
         }
-        front=front->next;
+        searchfront=searchfront->next;
     }
     return NULL;
 }
