@@ -7,8 +7,7 @@
 int main(){
     struct song_node *first;
     first=NULL;
-    printf("the linked list when first initialized:");
-    print_list(first);
+    //struct song_node *test=malloc(sizeof(struct song_node *));
     char a[100]="queen";
     char a1[100]="aerosmith";
     char a2[100]="the rolling stones";
@@ -25,7 +24,7 @@ int main(){
     char n5[100]="paint it black";
     char n6[100]="walk";
     char n7[100]="comfortably numb";
-    printf("%d\n",strcmp(n,n2));
+    char n8[100]="kashmir";
     first=insert_front(first,n,a);
     first=ordered_insert(first,n1,a);
     first=ordered_insert(first,n2,a3);
@@ -34,17 +33,21 @@ int main(){
     first=ordered_insert(first,n5,a2);
     first=ordered_insert(first,n6,a5);
     first=ordered_insert(first,n7,a6);
-    printf("%s\n",random_song(first)->name);
-    //remove_song(first,n,a);
+    first=ordered_insert(first,n8,a4);
     print_list(first);
-    printf("%p\n",search_artist(first,a)->name);
     struct song_node *table[27];
     for(int i=0;i<27;i++){
         table[i]=NULL;
     }
-    *table=add_node(table,first);
+    add_node(table,first);
+    print_lib(table);
+    print_list(artist_search(table,a));
+    print_list(list_letter(table,'l'));
+    delete_song(table,n3,a4);
     print_lib(table);
     //char *b=a3;
     //printf("%d\n",*a);
+    clear_lib(table);
+    print_lib(table);
     return 0;
 }

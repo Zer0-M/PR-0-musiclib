@@ -74,24 +74,34 @@ struct song_node * ordered_insert(struct song_node * front, char n[100], char a[
 }
 struct song_node * search_song(struct song_node * front, char n[100], char a[100]){
     while(front){
-        if(strcmp(front->artist,a)==0){
-            if(strcmp(front->name,n)==0){
-                return front;
+        if(!strcmp(front->artist,a)){
+            if(!strcmp(front->name,n)){
+                struct song_node * result=malloc(sizeof(struct song_node));
+                strcpy(result->name,front->name);
+                strcpy(result->artist,front->artist);
+                return result;
             }
         }
         front=front->next;
     }
     return NULL;
 }
-struct song_node * search_artist(struct song_node * front, char a[100]){
-    struct song_node * searchfront=front;
-    while(searchfront){
-        if(!strcmp(searchfront->artist,a)){
-            return searchfront;
-        }
-        searchfront=searchfront->next;
+int sngcmp(struct song_node * n1,struct song_node *n2){
+    if(!strcmp(n1->artist,n2->artist)){
+            return strcmp(n1->name,n2->name);
     }
-    return NULL;
+    return strcmp(n1->artist,n2->artist);
+}
+struct song_node * search_artist(struct song_node * front, char a[100]){
+    struct song_node * searchfront=malloc(sizeof(struct song_node));
+    searchfront=NULL;
+    while(front){
+        if(!strcmp(front->artist,a)){
+            searchfront=ordered_insert(searchfront,front->name,front->artist);
+        }
+        front=front->next;
+    }
+    return searchfront;
 }
 struct song_node * random_song(struct song_node * front){
     srand( time(NULL) );
@@ -111,18 +121,25 @@ int list_len(struct song_node * front){
     }
     return count;
 }
-void remove_song(struct song_node * front, char n[100], char a[100]){
+struct song_node * remove_song(struct song_node * front, char n[100], char a[100]){
     struct song_node * init=front;
     struct song_node * prev=front;
+    struct song_node * removed=search_song(front,n,a);
     while(front){
-        if(front==search_song(front,n,a)){
-            prev->next=front->next;
+        if(!sngcmp(removed,front)){
+            printf("%s : %s\n",prev->artist,prev->name);
             free(front);
-            return;
+            if(prev!=front){
+                prev->next=front->next;
+            }
+            else{
+                return front->next;
+            }
         }
         else{
             prev=front;
         }
         front=front->next;
     }
+    return init;
 }
