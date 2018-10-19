@@ -70,6 +70,7 @@ struct song_node * ordered_insert(struct song_node * front, char n[100], char a[
         }
         prev->next=new;
     }
+
     return init;
 }
 struct song_node * search_song(struct song_node * front, char n[100], char a[100]){
@@ -93,15 +94,13 @@ int sngcmp(struct song_node * n1,struct song_node *n2){
     return strcmp(n1->artist,n2->artist);
 }
 struct song_node * search_artist(struct song_node * front, char a[100]){
-    struct song_node * searchfront=malloc(sizeof(struct song_node));
-    searchfront=NULL;
     while(front){
         if(!strcmp(front->artist,a)){
-            searchfront=ordered_insert(searchfront,front->name,front->artist);
+            return front;
         }
         front=front->next;
     }
-    return searchfront;
+    return NULL;
 }
 struct song_node * random_song(struct song_node * front){
     srand( time(NULL) );
@@ -111,7 +110,11 @@ struct song_node * random_song(struct song_node * front){
         front=front->next;
         count++;
     }
-    return front;
+    struct song_node * song=malloc(sizeof(struct song_node*));
+    strcpy(song->name,front->name);
+    strcpy(song->artist,front->artist);
+    //front->next=NULL;
+    return song;
 }
 int list_len(struct song_node * front){
     int count = 0;
@@ -127,7 +130,6 @@ struct song_node * remove_song(struct song_node * front, char n[100], char a[100
     struct song_node * removed=search_song(front,n,a);
     while(front){
         if(!sngcmp(removed,front)){
-            printf("%s : %s\n",prev->artist,prev->name);
             free(front);
             if(prev!=front){
                 prev->next=front->next;
